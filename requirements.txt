@@ -1,0 +1,4 @@
+cohere
+google-cloud-speech
+gtts
+python-dotenv
