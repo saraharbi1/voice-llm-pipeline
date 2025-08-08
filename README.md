@@ -1,30 +1,28 @@
-# مشروع تحويل الصوت إلى نص واستخدام LLM وتحويل الناتج إلى صوت
+# مشروع معالجة الصوت بالذكاء الاصطناعي
 
-## 📁 هيكل المشروع
-```
-voice-llm-pipeline/
-├── .env                  # لحفظ مفاتيح API  
-├── requirements.txt      # المكاتب المطلوبة  
-├── app.py                # البرنامج الرئيسي  
-├── audio_input.wav       # مثال لملف صوتي مدخل  
-├── audio_output.mp3      # مثال لملف صوتي مخرج  
-└── README.md             # شرح تفصيلي للخطوات
-```
+## ⚙️ المتطلبات
+- Python 3.8+
+- مفاتيح API من [Cohere](https://cohere.com/) و[Google Cloud](https://cloud.google.com/)
 
-## ⚙️ المتطلبات الأساسية
-1. حساب Cohere API: https://dashboard.cohere.com/
-2. حساب Google Cloud: https://console.cloud.google.com/
-3. Python 3.8+
-
-## 🔧 خطوات التشغيل
+## 🚀 خطوات التشغيل
 ```bash
-git clone https://github.com/username/voice-llm-pipeline.git
-cd voice-llm-pipeline
-pip install -r requirements.txt
-python app.py
-```
+# 1. إنشاء بيئة افتراضية
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
 
-## 💡 ملاحظات
-- الملف الصوتي يجب أن يكون WAV أحادي 16000Hz
-- يمكن استبدال Google بـ SpeechRecognition
-- يمكن استخدام pyttsx3 بدل gTTS للعمل أوفلاين
+# 2. تثبيت المتطلبات
+pip install -r requirements.txt
+
+# 3. إعداد مفاتيح API
+# أ) إنشاء ملف .env وإضافة مفتاح Cohere:
+echo "COHERE_API_KEY=your_cohere_key_here" > .env
+
+# ب) إعداد Google Cloud:
+python setup_gcloud.py
+
+# 4. تحويل ملف صوتي إلى تنسيق 16kHz WAV
+ffmpeg -i input.mp3 -ar 16000 -ac 1 audio_input.wav
+
+# 5. تشغيل البرنامج
+python app.py

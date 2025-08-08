@@ -1,4 +1,6 @@
-cohere
-google-cloud-speech
-gtts
-python-dotenv
+cohere==4.52
+google-cloud-speech==2.22.0
+gtts==2.5.1
+pyttsx3==2.90
+python-dotenv==1.0.1
+argparse==1.4.0

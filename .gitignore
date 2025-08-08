@@ -1,0 +1,15 @@
+# ملفات البيئة
+venv/
+.env
+google_credentials.json
+
+# ملفات الصوت
+*.wav
+*.mp3
+
+# بايثون
+__pycache__/
+*.pyc
+
+# أنظمة
+.DS_Store
