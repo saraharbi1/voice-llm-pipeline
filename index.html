@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع معالجة الصوت بالذكاء الاصطناعي - سارة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff5e7d;
+            --light-color: #f8f9fa;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-card i {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .demo-container {
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .audio-processing {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .waveform {
+            width: 100%;
+            height: 200px;
+            background: #f1f3f4;
+            border-radius: 10px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, var(--secondary-color) 100%);
+            opacity: 0.7;
+            clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 0% 50%);
+        }
+        
+        .wave::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: inherit;
+            animation: wave-animation 4s linear infinite;
+            clip-path: polygon(0% 50%, 100% 50%, 100% 0%, 0% 0%);
+        }
+        
+        @keyframes wave-animation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .api-setup {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            text-align: left;
+            direction: ltr;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .result-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .transcript {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: right;
+            line-height: 1.8;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--dark-color);
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-microphone-alt"></i> مشروع معالجة الصوت بالذكاء الاصطناعي</h1>
+            <p class="description">نظام متكامل لتحويل الصوت إلى نص وتحليله باستخدام تقنيات الذكاء الاصطناعي المتقدمة</p>
+        </header>
+        
+        <section class="features">
+            <div class="feature-card">
+                <h3><i class="fas fa-cogs"></i> المتطلبات الأساسية</h3>
+                <ul>
+                    <li>Python 3.8 أو أعلى</li>
+                    <li>مفاتيح API من Cohere وGoogle Cloud</li>
+                    <li>مكتبات: cohere, google-cloud-speech, pydub</li>
+                    <li>أداة ffmpeg لتحويل الصوت</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-sliders-h"></i> المميزات</h3>
+                <ul>
+                    <li>تحويل الكلام إلى نص بدقة عالية</li>
+                    <li>تحليل المشاعر من الصوت</li>
+                    <li>دعم multiple languages</li>
+                    <li>معالجة الصوت في الوقت الفعلي</li>
+                    <li>واجهة سهلة الاستخدام</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3><i class="fas fa-code"></i> خطوات التشغيل</h3>
+                <ol>
+                    <li>إنشاء بيئة افتراضية</li>
+                    <li>تثبيت المتطلبات</li>
+                    <li>إعداد مفاتيح API</li>
+                    <li>تحويل الصوت إلى تنسيق 16kHz WAV</li>
+                    <li>تشغيل البرنامج</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section class="demo-container">
+            <h2><i class="fas fa-play-circle"></i> محاكاة معالجة الصوت</h2>
+            <p>جرب محاكاة عملية تحويل الصوت إلى نص باستخدام الذكاء الاصطناعي</p>
+            
+            <div class="audio-processing">
+                <div class="waveform">
+                    <div class="wave"></div>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                
+                <div class="controls">
+                    <button id="uploadBtn">
+                        <i class="fas fa-upload"></i> تحميل ملف صوتي
+                    </button>
+                    <button id="processBtn">
+                        <i class="fas fa-cogs"></i> معالجة الصوت
+                    </button>
+                    <button id="analyzeBtn">
+                        <i class="fas fa-chart-line"></i> تحليل النتائج
+                    </button>
+                </div>
+                
+                <div class="result-container" id="resultContainer">
+                    <h3><i class="fas fa-file-alt"></i> النص المستخرج</h3>
+                    <div class="transcript" id="transcript">
+                        مرحبا، هذا نموذج لمحاكاة عملية تحويل الصوت إلى نص. هذه التقنية تستخدم خوارزميات الذكاء الاصطناعي لتحويل الكلام المنطوق إلى نص مكتوب. يمكن استخدام هذه التقنية في العديد من التطبيقات مثل التسجيلات الصفية، تحليل المشاعر، والمساعدات الصوتية.
+                    </div>
+                    
+                    <h3><i class="fas fa-smile"></i> تحليل المشاعر</h3>
+                    <div class="sentiment">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 85%; background: var(--success-color);"></div>
+                        </div>
+                        <p>إيجابي بنسبة 85%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="api-setup">
+            <h2><i class="fas fa-key"></i> إعداد مفاتيح API</h2>
+            <p>لبدء استخدام المشروع، تحتاج إلى إعداد مفاتيح API من الخدمات التالية:</p>
+            
+            <div class="code-block">
+                <pre><code>
+# إعداد ملف .env
+COHERE_API_KEY=your_cohere_key_here
+GOOGLE_APPLICATION_CREDENTIALS=path_to_your_google_cloud_credentials_json
+
+# تشغيل إعداد Google Cloud
+python setup_gcloud.py
+
+# تحويل ملف صوتي إلى تنسيق 16kHz WAV
+ffmpeg -i input.mp3 -ar 16000 -ac 1 audio_input.wav
+                </code></pre>
+            </div>
+        </section>
+        
+        <footer>
+            <p>مشروع معالجة الصوت بالذكاء الاصطناعي &copy; 2023 - تطوير سارة</p>
+            <p>تقنيات الذكاء الاصطناعي لتطوير حلول الصوت المتقدمة</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadBtn = document.getElementById('uploadBtn');
+            const processBtn = document.getElementById('processBtn');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const progress = document.getElementById('progress');
+            const resultContainer = document.getElementById('resultContainer');
+            
+            // محاكاة تحميل ملف صوتي
+            uploadBtn.addEventListener('click', function() {
+                uploadBtn.innerHTML = '<i class="fas fa-check-circle"></i> تم التحميل';
+                uploadBtn.style.background = 'linear-gradient(to right, var(--success-color), #27ae60)';
+                
+                // تمكين زر المعالجة
+                processBtn.disabled = false;
+                processBtn.style.opacity = '1';
+            });
+            
+            // محاكاة معالجة الصوت
+            processBtn.addEventListener('click', function() {
+                // بدء شريط التقدم
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        processBtn.innerHTML = '<i class="fas fa-check-circle"></i> اكتملت المعالجة';
+                        processBtn.style.background = 'linear-gradient(to right, var(--success-color), #27ae60)';
+                        
+                        // تمكين زر التحليل
+                        analyzeBtn.disabled = false;
+                        analyzeBtn.style.opacity = '1';
+                    } else {
+                        width += 2;
+                        progress.style.width = width + '%';
+                    }
+                }, 50);
+            });
+            
+            // محاكاة تحليل النتائج
+            analyzeBtn.addEventListener('click', function() {
+                analyzeBtn.innerHTML = '<i class="fas fa-check-circle"></i> تم التحليل';
+                analyzeBtn.style.background = 'linear-gradient(to right, var(--success-color), #27ae60)';
+                
+                // عرض النتائج
+                resultContainer.style.display = 'block';
+                
+                // تمرير إلى قسم النتائج
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // تعطيل الأزرار في البداية
+            processBtn.disabled = true;
+            processBtn.style.opacity = '0.7';
+            analyzeBtn.disabled = true;
+            analyzeBtn.style.opacity = '0.7';
+        });
+    </script>
+</body>
+</html>
